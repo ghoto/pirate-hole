@@ -1,0 +1,15 @@
+export VPNUSER=
+export VPNPASS=
+export TZ=Americas/Los_Angeles
+export WEB_PORT=7878
+export USERID=$(id -u) # Do not change unless you need to run as another user
+export GROUPID=$(id -g) # Do not change unless you need to run as another user
+# Paths, set them ABSOLUTE. You can use BASE_PATH for configs
+export BASE_PATH=$(dirname $(readlink -f $0)) # Do not change this one
+#export RADARR_CONFIG=$BASEPATH/radarr-config
+export RADARR_CONFIG=
+export RADARR_MOVIES=
+export DELUGE_DOWNLOADS=
+export DELUGE_CONFIG=
+export JACKETT_CONFIG=
+export JACKETT_DOWNLOADS=

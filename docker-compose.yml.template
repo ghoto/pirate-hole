@@ -7,14 +7,14 @@ services:
     image: linuxserver/radarr
     container_name: radarr
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=Americas/Los_Angeles
+      - PGID=${GROUPID}
+      - PUID=${USERID}
+      - TZ=${TZ}
       - UMASK_SET=022
     volumes:
-      - <RADARR_CONFIG>:/config 
-      - <DELUGE_DOWLOADS>:/downloads
-      - <RADARR_MOVIES>:/movies
+      - ${RADARR_CONFIG}:/config 
+      - ${DELUGE_DOWNLOADS}:/downloads
+      - ${RADARR_MOVIES}:/movies
     depends_on:
       - jackett
       - deluge
@@ -23,26 +23,26 @@ services:
     network_mode: container:vpn
     image: linuxserver/jackett
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=Americas/Los_Angeles
+      - PGID=${GROUPID}
+      - PUID=${USERID}
+      - TZ=${TZ}
       - UMASK_SET=022
     volumes:
-      - <JACKETT_CONFIG>:/config 
-      - <JACKETT_DOWNLOADS>:/downloads 
+      - ${JACKETT_CONFIG}:/config 
+      - ${JACKETT_DOWNLOADS}:/downloads 
 
 
   deluge:
     network_mode: container:vpn
     image: linuxserver/deluge
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=Americas/Los_Angeles
+      - PGID=${GROUPID}
+      - PUID=${USERID}
+      - TZ=${TZ}
       - UMASK_SET=022
     volumes:
-      - <DELUGE_CONFIG>:/config 
-      - <DELUGE_DOWNLOADS>:/downloads 
+      - ${DELUGE_CONFIG}:/config 
+      - ${DELUGE_DOWNLOADS}:/downloads 
 
   web:
     image: dperson/nginx
@@ -60,7 +60,7 @@ services:
       - /tmp                                                                                 
       - /var/cache/nginx                                                                     
     ports:                                                                                   
-      - <PROXY_PORT>:80
+      - ${WEB_PORT}:80
     volumes:
-      - <BASE_PATH>/pirate_hole/nginx.conf:/etc/nginx/customs        
+      - ${BASE_PATH}/nginx.conf:/etc/nginx/customs        
     command: -I "customs/pirate-hole.conf"
