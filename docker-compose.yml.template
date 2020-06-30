@@ -1,0 +1,66 @@
+version: "2.1"
+
+services:
+      
+  radarr:
+    network_mode: container:vpn
+    image: linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Americas/Los_Angeles
+      - UMASK_SET=022
+    volumes:
+      - <RADARR_CONFIG>:/config 
+      - <DELUGE_DOWLOADS>:/downloads
+      - <RADARR_MOVIES>:/movies
+    depends_on:
+      - jackett
+      - deluge
+
+  jackett:
+    network_mode: container:vpn
+    image: linuxserver/jackett
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Americas/Los_Angeles
+      - UMASK_SET=022
+    volumes:
+      - <JACKETT_CONFIG>:/config 
+      - <JACKETT_DOWNLOADS>:/downloads 
+
+
+  deluge:
+    network_mode: container:vpn
+    image: linuxserver/deluge
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Americas/Los_Angeles
+      - UMASK_SET=022
+    volumes:
+      - <DELUGE_CONFIG>:/config 
+      - <DELUGE_DOWNLOADS>:/downloads 
+
+  web:
+    image: dperson/nginx
+    network_mode: bridge
+    links:
+      - radarr
+      - jackett
+      - deluge
+    depends_on:                                                                              
+      - radarr
+      - jackett
+      - deluge        
+    tmpfs:                                                                                   
+      - /run                                                                                 
+      - /tmp                                                                                 
+      - /var/cache/nginx                                                                     
+    ports:                                                                                   
+      - <PROXY_PORT>:80
+    volumes:
+      - <BASE_PATH>/pirate_hole/nginx.conf:/etc/nginx/customs        
+    command: -I "customs/pirate-hole.conf"
