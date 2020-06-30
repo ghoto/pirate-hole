@@ -5,7 +5,6 @@ services:
   radarr:
     network_mode: container:vpn
     image: linuxserver/radarr
-    container_name: radarr
     environment:
       - PGID=${GROUPID}
       - PUID=${USERID}
