@@ -10,6 +10,7 @@ export BASE_PATH=$(dirname $(readlink -f $0)) # Do not change this one
 export RADARR_CONFIG=
 export RADARR_MOVIES=
 export DELUGE_DOWNLOADS=
+export RADARR_DOWNLOADS=$DELUGE_DOWNLOADS/completed
 export DELUGE_CONFIG=
 export JACKETT_CONFIG=
 export JACKETT_DOWNLOADS=

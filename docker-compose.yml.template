@@ -12,7 +12,7 @@ services:
       - UMASK_SET=022
     volumes:
       - ${RADARR_CONFIG}:/config 
-      - ${DELUGE_DOWNLOADS}:/downloads
+      - ${RADARR_DOWNLOADS}:/downloads
       - ${RADARR_MOVIES}:/movies
     depends_on:
       - jackett
