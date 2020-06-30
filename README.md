@@ -23,7 +23,7 @@ First you need to start the VPN container. This can't go inside the compose beca
 ```
 Then,
 ```
-docker-compose start
+docker-compose up -d
 ```
 
 # Caveats
