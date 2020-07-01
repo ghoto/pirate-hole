@@ -14,3 +14,6 @@ export RADARR_DOWNLOADS=$DELUGE_DOWNLOADS/completed
 export DELUGE_CONFIG=
 export JACKETT_CONFIG=
 export JACKETT_DOWNLOADS=
+#Build versions
+export RADARR_BUILD=latest # options: latest, nightly, preview, 5.14
+export JACKETT_BUILD=latest # options: latest, development

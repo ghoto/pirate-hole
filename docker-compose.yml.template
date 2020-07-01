@@ -4,7 +4,7 @@ services:
       
   radarr:
     network_mode: container:vpn
-    image: linuxserver/radarr
+    image: linuxserver/radarr:${RADARR_BUILD}
     environment:
       - PGID=${GROUPID}
       - PUID=${USERID}
@@ -20,7 +20,7 @@ services:
 
   jackett:
     network_mode: container:vpn
-    image: linuxserver/jackett
+    image: linuxserver/jackett:${JACKETT_BUILD}
     environment:
       - PGID=${GROUPID}
       - PUID=${USERID}
