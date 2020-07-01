@@ -1,5 +1,5 @@
 # pirate-hole
-Docker compose for nordvpn+radarr+jackett+deluge combo
+Docker compose for nordvpn+radarr+sonarr+jackett+deluge combo
 
 # Initialization
 Copy `pirate-hole.conf.template` -> `pirate-hole.conf`
