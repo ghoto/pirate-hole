@@ -18,6 +18,19 @@ services:
       - jackett
       - deluge
 
+  sonarr:
+    image: linuxserver/sonarr:${SONARR_BUILD}
+    network_mode: container:vpn
+    environment:
+      - PUID=${USERID}
+      - PGID=${GROUPID}
+      - TZ=${TZ}
+      - UMASK_SET=022 #optional
+    volumes:
+      - ${SONARR_CONFIG}:/config
+      - ${SONARR_TV}:/tv
+      - ${SONAR_DOWNLOADS}:/downloads
+
   jackett:
     network_mode: container:vpn
     image: linuxserver/jackett:${JACKETT_BUILD}
@@ -48,10 +61,12 @@ services:
     network_mode: bridge
     links:
       - radarr
+      - sonarr
       - jackett
       - deluge
     depends_on:                                                                              
       - radarr
+      - sonarr
       - jackett
       - deluge        
     tmpfs:                                                                                   
