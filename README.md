@@ -31,6 +31,7 @@ docker-compose up -d
 Make sure you update the basepaths for `radarr`, `deluge`, and `jackett`.
 
 - radarr: in `$RADAR_CONFIG/config.xml` replace `<UrlBase></UrlBase>` with `<UrlBase>radarr</UrlBase>`
+- sonarr: in `$SONARR_CONFIG/config.xml` replace `<UrlBase></UrlBase>` with `<UrlBase>sonarr</UrlBase>`
 - deluge: in `$DELUGE_CONFIG/web.conf` replace `"base": ""` with `"base": "/deluge"`
 - jackett: in `$JACKET_CONFIG/Jackett/ServerConfig.json` replace `"BasePathOverride": "",` with `"BasePathOverride": "/jackett",`
 
@@ -41,5 +42,6 @@ Also in the configurations, you will need to setup radarr to work with deluge an
 # Usage
 Once everything is up and running you can access the services at
 - radarr: `http://SERVER:WEB_PORT/radarr`
+- sonarr: `http://SERVER:WEB_PORT/sonarr`
 - deluge: `http://SERVER:WEB_PORT/deluge`
 - jackett: `http://SERVER:WEB_PORT/jackett`
