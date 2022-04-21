@@ -17,6 +17,11 @@ services:
     depends_on:
       - jackett
       - deluge
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://www.google.com"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
 
   sonarr:
     image: linuxserver/sonarr:${SONARR_BUILD}
@@ -30,6 +35,11 @@ services:
       - ${SONARR_CONFIG}:/config
       - ${SONARR_TV}:/tv
       - ${SONAR_DOWNLOADS}:/downloads
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://www.google.com"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
 
   jackett:
     network_mode: container:vpn
@@ -42,6 +52,11 @@ services:
     volumes:
       - ${JACKETT_CONFIG}:/config 
       - ${JACKETT_DOWNLOADS}:/downloads 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://www.google.com"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
 
 
   deluge:
@@ -55,6 +70,11 @@ services:
     volumes:
       - ${DELUGE_CONFIG}:/config 
       - ${DELUGE_DOWNLOADS}:/downloads 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://www.google.com"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
 
   web:
     image: dperson/nginx
@@ -78,3 +98,11 @@ services:
     volumes:
       - ${BASE_PATH}/nginx.conf:/etc/nginx/customs        
     command: -I "customs/pirate-hole.conf"
+
+  autoheal:
+    restart: always
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
