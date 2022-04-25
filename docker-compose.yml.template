@@ -1,9 +1,25 @@
 version: "2.1"
 
 services:
-      
+
+  vpn:
+    image: ghcr.io/bubuntux/nordvpn:v3.12.3
+    network_mode: bridge
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_MODULE 
+    environment:
+      - USER=${VPNUSER}
+      - "PASS=${VPNPASS}"
+      - CONNECT=${VPNSERVER}
+      - TECHNOLOGY=NordLynx
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+    restart: unless-stopped
+
   radarr:
-    network_mode: container:vpn
+    network_mode: service:vpn
     image: linuxserver/radarr:${RADARR_BUILD}
     environment:
       - PGID=${GROUPID}
@@ -25,7 +41,7 @@ services:
 
   sonarr:
     image: linuxserver/sonarr:${SONARR_BUILD}
-    network_mode: container:vpn
+    network_mode: service:vpn
     environment:
       - PUID=${USERID}
       - PGID=${GROUPID}
@@ -35,6 +51,9 @@ services:
       - ${SONARR_CONFIG}:/config
       - ${SONARR_TV}:/tv
       - ${SONAR_DOWNLOADS}:/downloads
+    depends_on:
+      - jackett
+      - deluge 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://www.google.com"]
       interval: 1m30s
@@ -42,7 +61,7 @@ services:
       retries: 3
 
   jackett:
-    network_mode: container:vpn
+    network_mode: service:vpn
     image: linuxserver/jackett:${JACKETT_BUILD}
     environment:
       - PGID=${GROUPID}
@@ -50,7 +69,9 @@ services:
       - TZ=${TZ}
       - UMASK_SET=022
     volumes:
-      - ${JACKETT_CONFIG}:/config 
+      - ${JACKETT_CONFIG}:/config
+    depends_on:
+      - vpn 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://www.google.com"]
       interval: 1m30s
@@ -59,7 +80,7 @@ services:
 
 
   deluge:
-    network_mode: container:vpn
+    network_mode: service:vpn
     image: linuxserver/deluge
     environment:
       - PGID=${GROUPID}
@@ -69,6 +90,8 @@ services:
     volumes:
       - ${DELUGE_CONFIG}:/config 
       - ${DELUGE_DOWNLOADS}:/downloads 
+    depends_on:
+      - vpn 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://www.google.com"]
       interval: 1m30s
@@ -79,10 +102,7 @@ services:
     image: dperson/nginx
     network_mode: bridge
     links:
-      - radarr
-      - sonarr
-      - jackett
-      - deluge
+      - vpn
     depends_on:                                                                              
       - radarr
       - sonarr

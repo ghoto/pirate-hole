@@ -17,10 +17,6 @@ This will create the environment
 
 # Start
 
-First you need to start the VPN container. This can't go inside the compose because docker-compose doesn't apply `network_mode: service:vpn` correctly, and you risk of leaking your IP.
-```
-./run-vpn.sh
-```
 Then,
 ```
 docker-compose up -d

@@ -1,6 +1,7 @@
 export VPNUSER=
 export VPNPASS=
 export VPNSERVER=P2P
+export VPNNETLOCAL=
 export HOST_NET=
 export TZ=Americas/Los_Angeles
 export WEB_PORT=7878
@@ -10,7 +11,7 @@ export GROUPID=$(id -g) # Do not change unless you need to run as another user
 export BASE_PATH=$(dirname $(readlink -f $0)) # Do not change this one
 #export RADARR_CONFIG=$BASEPATH/radarr-config
 export RADARR_CONFIG=
-export RADARR_MOVIES=
+export RADARR_MOVIES
 export DELUGE_DOWNLOADS=
 export RADARR_DOWNLOADS=$DELUGE_DOWNLOADS/completed
 export DELUGE_CONFIG=
