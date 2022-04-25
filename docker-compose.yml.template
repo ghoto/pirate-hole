@@ -2,9 +2,24 @@ version: "2.1"
 
 services:
 
+  realip:
+    image: dperson/nginx
+    network_mode: bridge
+    tmpfs:                                                                                   
+      - /run                                                                                 
+      - /tmp                                                                                 
+      - /var/cache/nginx                                                                     
+    volumes:
+      - /home/pi/pirate-hole/nginx.conf:/etc/nginx/customs        
+    command: -I "customs/realip.conf"
+
   vpn:
     image: ghcr.io/bubuntux/nordvpn:v3.12.3
     network_mode: bridge
+    depends_on:
+      - realip
+    links:
+      - realip
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -16,6 +31,11 @@ services:
       - TECHNOLOGY=NordLynx
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
+    healthcheck:
+      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else exit 0; fi"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
     restart: unless-stopped
 
   radarr:
@@ -31,10 +51,11 @@ services:
       - ${RADARR_DOWNLOADS}:/downloads
       - ${RADARR_MOVIES}:/movies
     depends_on:
+      - realip
       - jackett
       - deluge
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://www.google.com"]
+      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else exit 0; fi"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -53,9 +74,10 @@ services:
       - ${SONAR_DOWNLOADS}:/downloads
     depends_on:
       - jackett
+      - realip
       - deluge 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://www.google.com"]
+      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else exit 0; fi"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -72,8 +94,9 @@ services:
       - ${JACKETT_CONFIG}:/config
     depends_on:
       - vpn 
+      - realip
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://www.google.com"]
+      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else exit 0; fi"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -92,8 +115,9 @@ services:
       - ${DELUGE_DOWNLOADS}:/downloads 
     depends_on:
       - vpn 
+      - realip
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://www.google.com"]
+      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else exit 0; fi"]
       interval: 1m30s
       timeout: 10s
       retries: 3
