@@ -51,7 +51,6 @@ services:
       - UMASK_SET=022
     volumes:
       - ${JACKETT_CONFIG}:/config 
-      - ${JACKETT_DOWNLOADS}:/downloads 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://www.google.com"]
       interval: 1m30s
