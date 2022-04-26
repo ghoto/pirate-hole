@@ -10,7 +10,7 @@ services:
       - /tmp                                                                                 
       - /var/cache/nginx                                                                     
     volumes:
-      - /home/pi/pirate-hole/nginx.conf:/etc/nginx/customs        
+      - ${BASE_PATH}/nginx.conf:/etc/nginx/customs        
     command: -I "customs/realip.conf"
 
   vpn:
