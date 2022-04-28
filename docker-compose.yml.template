@@ -32,7 +32,7 @@ services:
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
     healthcheck:
-      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else exit 0; fi"]
+      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else curl -f http://www.google.com ; fi"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -55,7 +55,7 @@ services:
       - jackett
       - deluge
     healthcheck:
-      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else exit 0; fi"]
+      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else curl -f http://www.google.com ; fi"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -77,7 +77,7 @@ services:
       - realip
       - deluge 
     healthcheck:
-      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else exit 0; fi"]
+      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else curl -f http://www.google.com ; fi"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -96,7 +96,7 @@ services:
       - vpn 
       - realip
     healthcheck:
-      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else exit 0; fi"]
+      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else curl -f http://www.google.com ; fi"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -117,7 +117,7 @@ services:
       - vpn 
       - realip
     healthcheck:
-      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else exit 0; fi"]
+      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else curl -f http://www.google.com ; fi"]
       interval: 1m30s
       timeout: 10s
       retries: 3
