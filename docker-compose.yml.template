@@ -2,40 +2,22 @@ version: "2.1"
 
 services:
 
-  realip:
-    image: dperson/nginx
-    network_mode: bridge
-    tmpfs:                                                                                   
-      - /run                                                                                 
-      - /tmp                                                                                 
-      - /var/cache/nginx                                                                     
-    volumes:
-      - ${BASE_PATH}/nginx.conf:/etc/nginx/customs        
-    command: -I "customs/realip.conf"
-
   vpn:
-    image: ghcr.io/bubuntux/nordvpn:v3.12.3
+    image: qmcgaw/gluetun
     network_mode: bridge
-    depends_on:
-      - realip
-    links:
-      - realip
     cap_add:
       - NET_ADMIN
-      - NET_RAW
-      - SYS_MODULE 
     environment:
-      - USER=${VPNUSER}
-      - "PASS=${VPNPASS}"
-      - CONNECT=${VPNSERVER}
-      - TECHNOLOGY=NordLynx
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=1
-    healthcheck:
-      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else curl -f http://www.google.com ; fi"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
+      - PGID=${GROUPID}
+      - PUID=${USERID}
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER}
+      - VPN_TYPE=${VPN_TYPE}
+      - WIREGUARD_PRIVATE_KEY=${VPN_WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${VPN_WIREGUARD_ADDRESSES}
+      - SERVER_CITIES=${VPN_SERVER_CITIES}
+      - FIREWALL_VPN_INPUT_PORTS=${VPN_FIREWALL_INPUT_PORTS}
+    volumes:
+      - ${VPN_CONFIG}/vpn-gluetun:/gluetun
     restart: unless-stopped
 
   radarr:
@@ -51,11 +33,10 @@ services:
       - ${RADARR_DOWNLOADS}:/downloads
       - ${RADARR_MOVIES}:/movies
     depends_on:
-      - realip
       - jackett
       - deluge
     healthcheck:
-      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else curl -f http://www.google.com ; fi"]
+      test: ["CMD-SHELL", "curl -f http://www.google.com"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -74,10 +55,9 @@ services:
       - ${SONAR_DOWNLOADS}:/downloads
     depends_on:
       - jackett
-      - realip
       - deluge 
     healthcheck:
-      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else curl -f http://www.google.com ; fi"]
+      test: ["CMD-SHELL", "curl -f http://www.google.com"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -94,9 +74,8 @@ services:
       - ${JACKETT_CONFIG}:/config
     depends_on:
       - vpn 
-      - realip
     healthcheck:
-      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else curl -f http://www.google.com ; fi"]
+      test: ["CMD-SHELL", "curl -f http://www.google.com"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -115,9 +94,8 @@ services:
       - ${DELUGE_DOWNLOADS}:/downloads 
     depends_on:
       - vpn 
-      - realip
     healthcheck:
-      test: ["CMD-SHELL", "if [ $$(curl http://realip/realip/) = $$(curl http://ifconfig.me) ]; then exit 1; else curl -f http://www.google.com ; fi"]
+      test: ["CMD-SHELL", "curl -f http://www.google.com"]
       interval: 1m30s
       timeout: 10s
       retries: 3

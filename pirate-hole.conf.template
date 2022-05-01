@@ -1,8 +1,10 @@
-export VPNUSER=
-export VPNPASS=
-export VPNSERVER=P2P
-export VPNNETLOCAL=
-export HOST_NET=
+export VPN_SERVICE_PROVIDER=
+export VPN_TYPE=
+export VPN_WIREGUARD_PRIVATE_KEY=
+export VPN_WIREGUARD_ADDRESSES=
+export VPN_SERVER_CITIES=
+export VPN_FIREWALL_INPUT_PORTS=
+export VPN_CONFIG=
 export TZ=Americas/Los_Angeles
 export WEB_PORT=7878
 export USERID=$(id -u) # Do not change unless you need to run as another user

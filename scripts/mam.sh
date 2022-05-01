@@ -2,7 +2,7 @@
 # My Anonamous Support
 # Copy this file to deluge-conf/custom-init.d/
 # First time installation, once deluge is running execute
-# docker-compose exec deluge curl -b 'MAM_IDi' https://t.myanonamouse.net/json/dynamicSeedbox.php
+# docker-compose exec deluge curl -b 'MAM_ID' https://t.myanonamouse.net/json/dynamicSeedbox.php
 
 tee /etc/periodic/15min/mam.sh <<EOF
 #!/bin/bash
