@@ -4,7 +4,7 @@ source pirate-hole.conf
 rm -f docker-compose.yml
 envsubst <"docker-compose.yml.template"> "docker-compose.yml"
 docker-compose config -q
-docker-compose up -d realip vpn sonarr radarr deluge
+docker-compose up -d vpn sonarr radarr deluge jackett
 while ! test -f "$RADARR_CONFIG/config.xml"; do
   sleep 10
   echo "Waiting for $RADARR_CONFIG/config.xml"
