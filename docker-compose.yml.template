@@ -16,8 +16,12 @@ services:
       - WIREGUARD_ADDRESSES=${VPN_WIREGUARD_ADDRESSES}
       - SERVER_CITIES=${VPN_SERVER_CITIES}
       - FIREWALL_VPN_INPUT_PORTS=${VPN_FIREWALL_INPUT_PORTS}
+      - FIREWALL_OUTBOUND_SUBNETS=${VPN_FIREWALL_OUTBOUND_SUBNETS}
     volumes:
       - ${VPN_CONFIG}/vpn-gluetun:/gluetun
+    ports:
+      - 8112:8112
+      - 9117:9117 
     restart: unless-stopped
 
   radarr:
@@ -57,7 +61,7 @@ services:
       - jackett
       - deluge 
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://www.google.com"]
+      test: ["CMD-SHELL", "curl -f http://www.google.com && curl -f http://localhost:8989"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -75,7 +79,7 @@ services:
     depends_on:
       - vpn 
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://www.google.com"]
+      test: ["CMD-SHELL", "curl -f http://www.google.com && curl -f http://localhost:9117"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -95,7 +99,7 @@ services:
     depends_on:
       - vpn 
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://www.google.com"]
+      test: ["CMD-SHELL", "curl -f http://www.google.com && curl -f http://localhost:8112"]
       interval: 1m30s
       timeout: 10s
       retries: 3
