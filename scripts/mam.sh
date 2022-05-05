@@ -8,5 +8,6 @@ tee /etc/periodic/15min/mam.sh <<EOF
 #!/bin/bash
 curl -c /config/mam.cookie -b /config/mam.cookie https://t.myanonamouse.net/json/dynamicSeedbox.php
 EOF
+chmod +x /etc/periodic/15min/mam.sh
 
 /usr/sbin/crond -S -l 0 -c /etc/crontabs
