@@ -24,48 +24,6 @@ services:
       - 9117:9117 
     restart: unless-stopped
 
-  radarr:
-    network_mode: service:vpn
-    image: linuxserver/radarr:${RADARR_BUILD}
-    environment:
-      - PGID=${GROUPID}
-      - PUID=${USERID}
-      - TZ=${TZ}
-      - UMASK_SET=022
-    volumes:
-      - ${RADARR_CONFIG}:/config 
-      - ${RADARR_DOWNLOADS}:/downloads
-      - ${RADARR_MOVIES}:/movies
-    depends_on:
-      - jackett
-      - deluge
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://www.google.com"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-
-  sonarr:
-    image: linuxserver/sonarr:${SONARR_BUILD}
-    network_mode: service:vpn
-    environment:
-      - PUID=${USERID}
-      - PGID=${GROUPID}
-      - TZ=${TZ}
-      - UMASK_SET=022 #optional
-    volumes:
-      - ${SONARR_CONFIG}:/config
-      - ${SONARR_TV}:/tv
-      - ${SONAR_DOWNLOADS}:/downloads
-    depends_on:
-      - jackett
-      - deluge 
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://www.google.com && curl -f http://localhost:8989"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-
   jackett:
     network_mode: service:vpn
     image: linuxserver/jackett:${JACKETT_BUILD}
@@ -83,7 +41,6 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
-
 
   deluge:
     network_mode: service:vpn
@@ -104,11 +61,59 @@ services:
       timeout: 10s
       retries: 3
 
+  radarr:
+    network_mode: bridge
+    image: linuxserver/radarr:${RADARR_BUILD}
+    environment:
+      - PGID=${GROUPID}
+      - PUID=${USERID}
+      - TZ=${TZ}
+      - UMASK_SET=022
+    volumes:
+      - ${RADARR_CONFIG}:/config 
+      - ${RADARR_DOWNLOADS}:/downloads
+      - ${RADARR_MOVIES}:/movies
+    depends_on:
+      - jackett
+      - deluge
+    links:
+      - vpn
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://www.google.com"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
+  sonarr:
+    image: linuxserver/sonarr:${SONARR_BUILD}
+    network_mode: bridge 
+    environment:
+      - PUID=${USERID}
+      - PGID=${GROUPID}
+      - TZ=${TZ}
+      - UMASK_SET=022 #optional
+    volumes:
+      - ${SONARR_CONFIG}:/config
+      - ${SONARR_TV}:/tv
+      - ${SONAR_DOWNLOADS}:/downloads
+    depends_on:
+      - jackett
+      - deluge 
+    links:
+      - vpn
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://www.google.com && curl -f http://localhost:8989"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
   web:
     image: dperson/nginx
     network_mode: bridge
     links:
       - vpn
+      - radarr
+      - sonarr
     depends_on:                                                                              
       - radarr
       - sonarr
