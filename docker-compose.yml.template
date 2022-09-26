@@ -45,6 +45,7 @@ services:
   deluge:
     network_mode: service:vpn
     image: linuxserver/deluge
+    mem_limit: 512m
     environment:
       - PGID=${GROUPID}
       - PUID=${USERID}
